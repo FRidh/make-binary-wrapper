@@ -29,6 +29,9 @@ let
 
       # See the following tests for why variables are set the way they are.
 
+      # Test argv0 by testing we can still pass "-c"
+      $out/bin/python -c "import sys; print(\"hello\")"
+
       # Test `set`: We set FOO to bar
       $out/bin/python -c "import os; assert os.environ[\"FOO\"] == \"bar\""
 
@@ -42,10 +45,10 @@ let
 
       # Test `prefix`:
       export MYPATH=one:two:three
-      $out/bin/python -c "import os; assert os.environ[\"MYPATH\"].split(":")[0] == \"zero\""
+      $out/bin/python -c "import os; assert os.environ[\"MYPATH\"].split(\":\")[0] == \"zero\""
 
       # Test `suffix`:
-      $out/bin/python -c "import os; assert os.environ[\"MYPATH\"].split(":")[0] == \"four\""
+      $out/bin/python -c "import os; assert os.environ[\"MYPATH\"].split(\":\")[-1] == \"four\""
 
       # Test `NIX_DEBUG_WRAPPER`:
       DEBUG_BINARY_WRAPPER=1 $out/bin/python

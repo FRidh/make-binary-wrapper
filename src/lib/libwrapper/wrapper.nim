@@ -93,7 +93,7 @@ let wrapperDescription = parseJson(jsonString)
 let wrapper = to(wrapperDescription, Wrapper)
 processEnvironment(wrapper.environment)
 let argv = wrapper.original # convert target to cstring
-let argc = allocCStringArray(concat(@[argv], wrapper.flags))
+let argc = allocCStringArray(concat(@[wrapper.wrapper], wrapper.flags, commandLineParams()))
 
 # Run command in new environment but before executing our executable 
 discard execShellCmd(wrapper.run)
