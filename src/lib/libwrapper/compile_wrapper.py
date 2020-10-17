@@ -20,9 +20,12 @@ def compile_wrapper(instruction: Dict):
         shutil.copyfile(WRAPPER_SOURCE, tmpdir / "wrapper.nim" )
         with open(tmpdir / "wrapper.json", "w") as fout:
             json.dump(instruction, fout)
-        subprocess.run(
-            f"cd {tmpdir} && {NIM_EXECUTABLE} --warnings=off --hints:off --nimcache=. --gc:none -d:release --opt:size compile {tmpdir}/wrapper.nim && {STRIP_EXECUTABLE} -s {tmpdir}/wrapper",
-            shell=True,
-        )
+        try:
+            result = subprocess.run(
+                f"cd {tmpdir} && {NIM_EXECUTABLE} --warnings=off --hints:off --nimcache=. --gc:none -d:release --opt:size compile {tmpdir}/wrapper.nim && {STRIP_EXECUTABLE} -s {tmpdir}/wrapper",
+                shell=True, check=True, text=True, capture_output=True,
+            )
+        except subprocess.CalledProcessError as exc:
+            raise RuntimeError(f"Compilation of wrapper failed: \n {exc.stderr}") from exc
         shutil.move(tmpdir / "wrapper", instruction["wrapper"])
         

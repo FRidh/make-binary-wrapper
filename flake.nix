@@ -9,12 +9,10 @@
   in rec {
     packages.make-binary-wrapper = pkgs.callPackage ./default.nix { };
 
-    packages.tests = pkgs.callPackage ./tests.nix {
+    defaultPackage = packages.make-binary-wrapper;
+
+    checks = pkgs.callPackages ./tests.nix {
       inherit (packages) make-binary-wrapper;
     };
-  
-    defaultPackage = packages.make-binary-wrapper;
-  
-    checks.tests = packages.tests;
   });
 }

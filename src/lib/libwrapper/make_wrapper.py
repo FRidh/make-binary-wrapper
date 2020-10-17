@@ -1,4 +1,5 @@
 import argparse
+import shlex
 import textwrap
 from typing import Dict, List
 
@@ -52,7 +53,7 @@ def parse_args() -> Dict:
         help="Run command before the executable"
     )
     parser.add_argument(
-        "--add-flags", dest="flags", nargs=1, type=str, metavar="FLAGS", action="append", default=[],
+        "--add-flags", dest="flags", type=str, metavar="FLAGS", default="",
         help="Add flags to invocation of process"
     )
     parser.add_argument(
@@ -101,7 +102,7 @@ def convert_args(args: Dict) -> Dict:
     output["original"] = args["original"]
     output["wrapper"] = args["wrapper"]
     output["run"] = args["run"]
-    output["flags"] = [item[0] for item in args["flags"]]
+    output["flags"] = shlex.split(args["flags"])
 
     output["environment"] = {}
     for key, value in args.items():
