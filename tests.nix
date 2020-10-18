@@ -41,7 +41,7 @@ let
 
       # Test `unset`: # We set MYPATH and unset it in the wrapper.
       export UNSET_THIS=1
-      $out/bin/python -c "import os; assert \"UNSET_THIS\" not in os.environ[\"BAR\"]"
+      $out/bin/python -c "import os; assert \"UNSET_THIS\" not in os.environ"
 
       # Test `prefix`:
       export MYPATH=one:two:three
